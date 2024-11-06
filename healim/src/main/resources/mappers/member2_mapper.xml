@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+	<!-- 회원가입 쿼리 -->
+	<insert id="join" parameterType="jvo">
+		insert into tb_member(mber_id, password, mber_nm, mbtlnum, mber_email_adres, sbscrb_de, crt_by)
+		values(#{mber_id}, #{password}, #{mber_nm}, #{mbtlnum}, #{mber_email_adres}, #{sbscrb_de}, #{crt_by})
+	</insert>
+	<!-- 이메일 중복 확인 쿼리 -->
+	<select id="countByEmail" parameterType="String" resultType="int">
+    	SELECT COUNT(*) FROM tb_member WHERE mber_id = #{mber_id}
+	</select>
+	<!-- 로그인 쿼리 -->
+	<select id="loginchk" parameterType="lvo" resultType="lvo">
+		select * from tb_member where mber_id = #{mber_id}
+	</select>
+	
+	<!-- 마이페이지 정보보기 쿼리 -->
+	<select id="myPage" parameterType="String" resultType="jvo">
+		select * from tb_member where mber_id = #{mber_id}
+	</select>
+	
+	<!-- 마이페이지 변경사항 수정 쿼리 -->
+	<update id="update" parameterType="jvo">
+		update tb_member 
+		set 
+			mber_id = #{mber_id}, 
+			password = #{password}, 
+			mber_nm = #{mber_nm}, 
+			mbtlnum = #{mbtlnum} 
+		where 
+			mber_id = #{mber_id}
+	</update>
+	<!-- 회원가입 로그 저장 -->
+	<insert id="logInsert" parameterType="jvo">
+		insert into tb_member_log(mber_id, login_dt)
+		values(#{mber_id}, NOW())
+	</insert>
+</mapper>

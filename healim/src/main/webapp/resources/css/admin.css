@@ -1,0 +1,196 @@
+
+/*-------------네비게이션,헤더css-----------*/
+        /*body 초기화*/
+        body{
+            margin: 0px;
+        }
+        /*각 박스 시각화*/
+        /*div{
+            border: 1px solid gray;
+        }*/
+        /*
+        1.전체 페이지 그리드 레이아웃  
+        2.각 헤더 메인 풋터 높이조절함 다만 메인은 최소 최대 지정:
+                                    -> 메인 내용이 많으면 늘어나서 스크롤로 넘어가게함
+        */
+       .page{
+        display: grid;
+        grid-template-rows: 50px minmax(800px,auto) 80px;
+       }
+       /*메인은 네비게이션과 컨텐츠로 그리드를 이용해 나눔*/
+       .main{
+        display: grid;
+        grid-template-columns: 50px 1fr;
+       }
+       /*네비게이션 배경적용*/
+       .nav{
+        background-color: #EFEFE9;
+        padding: 7px;
+        box-shadow: inset 2px -2px 10px 1px lightgray;
+       }
+       /*네비게이션 리스트 스타일 제거 padding 균일하게 배치*/
+       .nav_button{
+        list-style: none;
+        padding: 10px;
+        margin-top: 3px;
+       }
+       /*왼쪽 바로가기 버튼별 간격 조정*/
+       .nav_img{
+        margin-bottom: 30px;
+       }
+       /*
+       맨위 이미지 정렬 
+       배경 파란색 바꿈
+       */
+       
+       .top1{
+        display: grid;
+        grid-template-columns: auto auto 1fr;
+        grid-template-rows: 50px;
+        background-color: #223030;
+       }
+       
+       /*인라인 블록*/
+       .bt_header{
+        /* width: 3.1em; */
+        width: 110px;
+        position: relative;
+        top: 15px;
+        left: 10px;
+       }
+       /*ADMINISTRATOR 너비 폰트 위치 조정*/
+       .administrator{
+        color: white;
+        line-height: 56px;
+        width: 170px;
+        text-align: center;
+        font-size: 14px;
+        position: relative;
+        left: -5px;
+       }
+       /*house 아이콘 사이즈 조정*/
+       .houseimg{
+        width: 25px;
+        padding-top: 14px;
+       }
+       /* 홈페이지 버튼 */
+       .homepagebutton{
+        
+        background-color: transparent;
+        border: 0; 
+        color: white;
+        position: relative;
+        top : -4px;
+        left : 5px;
+       }
+       /*홈페이지 로그아웃 버튼 조정*/
+       .gohome{
+        display: grid;
+        grid-template-columns:1fr auto auto;
+       
+       }
+       .logoutbutton{
+        width: 70px;
+        background-color: transparent;
+        border: 0; 
+        color: white;
+        position: relative;
+        top : -7px;
+
+        
+       }
+       .logoutbox{
+        margin-left: 20px;
+        margin-right: 20px;
+       }
+       /*h2 마진 초기화*/
+       h2{
+        display: inline-block;
+        margin: 0px;
+        font-size: 20px;
+       }
+       .top2text{
+        width: 300px;
+        margin-left: 20px;
+        padding: 12px 0px;
+        
+       }
+       /*탑2 배경 색깔 적용*/
+       .top2{
+        background-color: rgb(247, 247, 247);
+        border-bottom: 1px solid #ddd;
+       }
+/*----콘텐츠박스css-----------*/
+       /*content박스 그리드화 검색창 박스 테이블 박스로 구분 배경화면 적용*/
+       .content{
+        display: grid;
+        grid-template-rows: 52px 50px 1fr;
+        background-color: rgb(247, 247, 247);
+       }
+       /*서치 박스 배치*/
+       .searchsection{
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        
+       }
+       /*서치박스 패딩 적용*/
+       .searchbox{
+       padding: 8px 12px;
+       
+       }
+       /*테이블 박스 배경화면 및 패딩 마진 적용*/
+       .tablebox{       
+        padding: 30px 70px;
+       }
+/* 테이블  */
+/*th 컬러 배경 설정*/
+       th{
+        background-color: #959D90;
+        color: white;
+       }
+       /*th 컬러 배경 설정*/
+       td{
+        background-color: #FFF;
+       }
+       /*보더 패딩 컬러 설정*/
+       th,td{
+        border: 1px solid #D6DCE7;
+        padding: 10px;
+       }
+       table{
+        border-collapse: collapse;
+        width: 100%;
+        box-shadow: 0px 1px 15px 1px lightgray;
+       }
+       
+       /* 각 테이블 위치 설정 패딩 설정 */
+       section{
+       margin-bottom: 50px;
+       
+       }
+       
+       
+       /*게시판 관리 메뉴 css  그리드, 스타일 마진 패딩 설정*/
+       .menu{
+       list-style-type: none;
+       display: grid;
+       grid-template-columns:150px 150px 150px 150px 150px;
+       padding-left: 0px;
+       margin-bottom: 0px;
+       }
+       .menu li{
+       border: 1px solid #D6DCE7;
+       background-color : #959D90;
+       padding: 10px;
+       border-radius: 8px 8px 0px 0px;
+       text-align: center;
+       color: white;
+       }
+       .menu>li:hover{
+  		cursor: pointer;
+       }
+
+/*-------- footer css 적용------- */
+       .footer{
+        background-color: #EFEFE9;
+       }

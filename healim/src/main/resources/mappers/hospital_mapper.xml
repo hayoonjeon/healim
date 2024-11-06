@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hospital">
+	<select id="search" parameterType="map" resultType="hvo">
+		select *
+		from tb_hospital_info
+		where city_name in
+		<foreach item="district" collection="district" open="("
+			separator="," close=")">
+			#{district}
+		</foreach>
+
+		<if test='type == "N" or type == "H"'>
+			AND h_type = #{type}
+		</if>
+
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	<select id="countAll" parameterType="map" resultType="int">
+		select count(*)
+		from tb_hospital_info
+		where city_name in
+		<foreach item="district" collection="district" open="("
+			separator="," close=")">
+			#{district}
+		</foreach>
+		<if test='type == "N" or type == "H"'>
+			AND h_type = #{type}
+		</if>
+	</select>
+	<select id="selectH" parameterType="map" resultType="hvo">
+		select *
+		from tb_hospital_info
+		where h_type = 'H'
+		order by h_name
+		limit #{limit} offset #{offset}
+	</select>
+	<select id="count" parameterType="map" resultType="int">
+		select count(*) from tb_hospital_info
+		where h_type = #{facilityType}
+	</select>
+
+
+	<select id="selectN" parameterType="map" resultType="hvo">
+		select *
+		from tb_hospital_info
+		where h_type = 'N'
+		order by h_name
+		limit #{limit}
+		offset #{offset}
+	</select>
+	
+	<update id="hit" parameterType="String">
+		update tb_hospital_info set hit_cnt = hit_cnt + 1 where h_id = #{h_id}
+	</update>
+	
+	<select id="hDetail" parameterType="String" resultType="hvo">
+		select * from tb_hospital_info where h_id = #{h_id}
+	</select>
+</mapper>
