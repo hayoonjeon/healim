@@ -161,9 +161,9 @@ form {
 
 		<!-- 제목 -->
 		<form method="post" enctype="multipart/form-data"
-			action="/comment_deleteOk">
-			<h2>댓글 삭제 : "${mvo.wr_subject}"</h2>
-
+			action="/reviewDeleteOk">
+			<h2>리뷰 삭제 </h2>
+		
 		
 
 			<table>
@@ -173,6 +173,7 @@ form {
 					<input type="password" name="passwordInput">
 
 					<!-- 로그인 아이디 실제 변수명 쓰기(일치할때만 나옴). 평소엔 안뜨는게 정상 -->
+					<input type="hidden" name="h_id" value="${h_id}">
 					<input type="hidden" name="wr_id" value="${mvo.wr_id}">
 					<input type="hidden" name="parent_id" value="${mvo.parent_id}">
 					<input type="hidden" name="bbs_id" value="${mvo.bbs_id}">
@@ -180,7 +181,7 @@ form {
 					<input type="hidden" name="mber_nm" value="${mvo.mber_nm}">
 					<input type="hidden" name="password" value="${mvo.password}">
 					<input type="submit" value="삭제">
-					<input type="button" value="취소" onclick="location.href='/boardOneList?wr_id=${mvo.parent_id}&bbs_id=${mvo.bbs_id}'">
+					<input type="button" value="취소" onclick="location.href='/hospitalDetail?h_id=${h_id}'">
 					<%-- </c:if> --%>
 
 				</tbody>

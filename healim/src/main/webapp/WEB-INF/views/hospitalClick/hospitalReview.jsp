@@ -162,7 +162,7 @@ textarea {
 
 		<!-- 리뷰 for문  -->
 		<c:forEach var="k" items="${list}">
-		<form action="">
+		<form action="/reviewDelete">
 			<div class="review">
 				<div class="review-header">
 					<div class="review-rating">
@@ -177,6 +177,9 @@ textarea {
 				<div class="review-content">${k.wr_content}</div>
 			</div>
 			<c:if test="${k.mber_id==mbvo.mber_id}">
+				<input type="hidden" name="h_id" value="${k.h_id}">
+				<input type="hidden" name="bbs_id" value="${k.bbs_id}">
+				<input type="hidden" name="wr_id" value="${k.wr_id}">
 				<input type="submit" value="삭제하기">
 			</c:if>
 			</form>

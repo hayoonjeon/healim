@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.ict.healim.service.HospitalService;
 import com.ict.healim.service.MainBoardService;
 import com.ict.healim.vo.HospitalVO;
 import com.ict.healim.vo.MainBoardPagingVO;
@@ -47,8 +43,7 @@ public class MainBoardController {
 	@Autowired
 	private MainBoardService mainBoardService;
 	
-	@Autowired
-	private HospitalService hospitalService;
+
 
 
 	@Autowired
@@ -329,11 +324,9 @@ public class MainBoardController {
 		String wr_id = request.getParameter("wr_id");
 		ModelAndView mv = new ModelAndView("redirect:/boardOneList");
 
-		/*
-		 * 비밀번호 체크 BbsVO bvo2 = bbsService.getBbsDetail(b_idx); String dbpassword  =
-		 * bvo2.getpassword (); if (passwordEncoder.matches(bvo.getpassword (), dbpassword )) {
-		 */
-		// 원글 수정
+		
+		
+		
 		try {
 			String path = request.getSession().getServletContext().getRealPath("/resources/upload");
 			MultipartFile file = mvo.getFile_name();
@@ -466,17 +459,21 @@ public class MainBoardController {
 
 		String wr_id = request.getParameter("wr_id");
 		String bbs_id = request.getParameter("bbs_id");
+		String h_id = request.getParameter("h_id");
+
 
 		ModelAndView mv = new ModelAndView("mainBoard/commentDeletePage");
 		MainBoardVO mvo = mainBoardService.getWrList(wr_id, bbs_id);
+
 		mv.addObject("mvo", mvo);
+		mv.addObject("h_id", h_id);
 
 		return mv;
 	}
 	@RequestMapping("/comment_deleteOk")
 	public ModelAndView comment_deleteOk(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		
+		//리뷰 구분 ( 리뷰는  h_id가 있음)
 		String parent_id = request.getParameter("parent_id"); //댓글의 원게시물 게시물아이디
 		String wr_id = request.getParameter("wr_id"); //댓글 게시물아이디
 		String bbs_id = request.getParameter("bbs_id"); // 댓글게시판아이디
@@ -493,20 +490,26 @@ public class MainBoardController {
 			// 맞으면 삭제 진행.
 			int result = mainBoardService.deleteBoardVO(mvo);
 			if (result > 0) {
-				mv.setViewName("redirect:/boardOneList");
-				mv.addObject("bbs_id",bbs_id);
-				mv.addObject("wr_id",parent_id);  //삭제되었으면 원 게시물로 이동해야함.
-				return mv;
+					mv.setViewName("redirect:/boardOneList");
+					mv.addObject("bbs_id",bbs_id);
+					mv.addObject("wr_id",parent_id);  //삭제되었으면 원 게시물로 이동해야함.
+					return mv;
+				}
+			
 			}
-		} else {
+		 else {
 			// 비밀번호가 틀리다.
 			System.out.println("댓글삭제실패용parent_id"+parent_id);
 			System.out.println("댓글삭제실패용wr_id"+wr_id);
 			System.out.println("댓글삭제실패용bbs_id"+bbs_id);
-			mv.setViewName("mainBoard/commentDeletePage");
-			mv.addObject("password chk", "fail");
-			mv.addObject("mvo", mvo); //재시도할떄도 password  비교해야함
-			return mv;
+		
+			
+				mv.setViewName("mainBoard/commentDeletePage");
+				mv.addObject("passwordchk", "fail");
+				mv.addObject("mvo", mvo); //재시도할떄도 password  비교해야함
+				return mv;
+			
+			
 		}
 
 		return new ModelAndView("mainBoard/boardError");
@@ -710,7 +713,69 @@ public class MainBoardController {
 		
 	}
 	
-	
+
+	@RequestMapping("/reviewDelete")
+	public ModelAndView reviewDelete(HttpServletRequest request) {
+
+		String wr_id = request.getParameter("wr_id");
+		String bbs_id = request.getParameter("bbs_id");
+		String h_id = request.getParameter("h_id");
+
+
+		ModelAndView mv = new ModelAndView("mainBoard/reviewDeletePage");
+		MainBoardVO mvo = mainBoardService.getWrList(wr_id, bbs_id);
+
+		mv.addObject("mvo", mvo);
+		mv.addObject("h_id", h_id);
+
+		return mv;
+	}
+	@RequestMapping("/reviewDeleteOk")
+	public ModelAndView reviewDeleteOk(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		//리뷰 구분 ( 리뷰는  h_id가 있음)
+		String h_id = request.getParameter("h_id");
+		String parent_id = request.getParameter("parent_id"); //댓글의 원게시물 게시물아이디
+		String wr_id = request.getParameter("wr_id"); //댓글 게시물아이디
+		String bbs_id = request.getParameter("bbs_id"); // 댓글게시판아이디
+		// 삭제창에서 입력한 비밀번호값 받아오기.
+		String passwordInput = request.getParameter("passwordInput");
+		// 글제목, 게시판제목으로 글관련 mvo 검색
+		MainBoardVO mvo = mainBoardService.getWrList(wr_id, bbs_id); //댓글삭제시 댓글비교용으로 db 갓다옴.
+		// 게시물의 사용자 패스워드 DB에서 뽑아내옴
+		System.out.println("댓글삭제용"+wr_id);
+		System.out.println("댓글삭제용"+bbs_id);
+		String password  = mvo.getPassword(); //댓글비교용 db의 pw. 
+		// 비밀번호 체크
+		if (passwordEncoder.matches(passwordInput,password )) {
+			// 맞으면 삭제 진행.
+			int result = mainBoardService.deleteBoardVO(mvo);
+			if (result > 0) {
+					mv.setViewName("redirect:/hospitalDetail?h_id="+h_id);
+					mv.addObject("bbs_id",bbs_id);
+					mv.addObject("wr_id",parent_id);  //삭제되었으면 원 게시물로 이동해야함.
+					return mv;
+				}
+			
+			}
+		 else {
+			// 비밀번호가 틀리다.
+			System.out.println("리뷰삭제실패용parent_id"+parent_id);
+			System.out.println("리뷰삭제실패용wr_id"+wr_id);
+			System.out.println("리뷰삭제실패용bbs_id"+bbs_id);
+		
+			
+				mv.setViewName("mainBoard/reviewDeletePage");
+				mv.addObject("passwordchk", "fail");
+				mv.addObject("mvo", mvo); //재시도할떄도 password  비교해야함
+				mv.addObject("h_id", h_id); //재시도할떄도 h_id 있어야함
+				return mv;
+			
+			
+		}
+
+		return new ModelAndView("mainBoard/boardError");
+	}
 
 	
 }
