@@ -173,7 +173,7 @@ a, a:visited, a:hover, a:active {
 			<div class="board-header">
 				<a href="/boardListAll?bbs_id=NOTI"><span>공지사항</span></a>
 			</div>
-			<div class="board-content">
+			<div class="board-content" onclick="location.href='/boardListAll?bbs_id=NOTI'">
 				<c:forEach var="k" items="${list1}">
 					${k.wr_subject}
 					<br>
@@ -189,7 +189,7 @@ a, a:visited, a:hover, a:active {
 					src="/resources/img/greenplus.jpg" alt="추가 버튼">
 				</a>
 			</div>
-			<div class="board-content">
+			<div class="board-content" onclick="location.href='/boardListAll?bbs_id=INQU'">
 				<c:forEach var="k" items="${list2}">
 					${k.wr_subject}
 					<br>
@@ -205,7 +205,7 @@ a, a:visited, a:hover, a:active {
 					src="/resources/img/greenplus.jpg" alt="추가 버튼">
 				</a>
 			</div>
-			<div class="board-content">
+			<div class="board-content"  onclick="location.href='/boardListAll?bbs_id=CONS'">
 				<c:forEach var="k" items="${list3}">
 					${k.wr_subject}
 					<br>
@@ -221,7 +221,7 @@ a, a:visited, a:hover, a:active {
 					src="/resources/img/greenplus.jpg" alt="추가 버튼">
 				</a>
 			</div>
-			<div class="board-content">
+			<div class="board-content"  onclick="location.href='/boardListAll?bbs_id=FREE'">
 				<c:forEach var="k" items="${list4}">
 					${k.wr_subject}
 					<br>

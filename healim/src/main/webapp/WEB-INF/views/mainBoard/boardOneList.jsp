@@ -252,7 +252,7 @@ span {
 			<%-- 댓글 출력 창 --%>
 			<div style="display: table; margin: 0 auto;">
 				<c:forEach var="k" items="${list}">
-				<c:if test="${k.wr_active =='0' }">
+				<c:if test="${k.wr_active =='0'||k.sort_ordr =='0'}">
 					<div
 						style="border: 1px solid #cc00cc; width: 580px; margin: 5px; padding: 5px;">
 						<form action="/comment_delete" method="post">

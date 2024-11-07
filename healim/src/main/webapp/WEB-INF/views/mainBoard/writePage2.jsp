@@ -218,6 +218,9 @@ body {
 
 			<div class="form-group">
 				<label for="title"></label> <input type="text" id="title" name="wr_subject" placeholder="제목을 입력하세요" required>
+				<c:if test="${bbs_id == 'CONS'}">
+				<label for="title"></label> <input type="text" id="title" name="h_name" placeholder="'병원이름'을 정확히 입력하세요" required>
+				</c:if>
 			</div>
 				<!--textarea는 summernote가 들어감 ( 아래 함수있음)  -->
 			<div class="form-group">

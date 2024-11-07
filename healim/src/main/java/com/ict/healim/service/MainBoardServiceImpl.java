@@ -94,4 +94,28 @@ public class MainBoardServiceImpl implements MainBoardService {
 		return mainBoardDAO.getUserInfo(mber_id);
 	}
 
+	@Override
+	public List<MainBoardVO> getHospitalConsult(String h_id) {
+		// TODO Auto-generated method stub
+		return mainBoardDAO.getHospitalConsult(h_id);
+	}
+
+	@Override
+	public int getCountHospitalConsultReple(String wr_id) {
+		// TODO Auto-generated method stub
+		return mainBoardDAO.getCountHospitalConsultReple(wr_id);
+	}
+
+	@Override
+	public int getCheckConsultReple(String h_id) {
+		// TODO Auto-generated method stub
+		return mainBoardDAO.getCheckConsultReple(h_id);
+	}
+
+	@Override
+	public List<MainBoardVO> getReview(String h_id) {
+		// TODO Auto-generated method stub
+		return mainBoardDAO.getReview(h_id);
+	}
+
 }

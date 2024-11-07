@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +33,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ict.healim.service.HospitalService;
 import com.ict.healim.service.MainBoardService;
+import com.ict.healim.vo.HospitalVO;
 import com.ict.healim.vo.MainBoardPagingVO;
 import com.ict.healim.vo.MainBoardVO;
 import com.ict.healim.vo.MemberVO;
@@ -40,6 +47,8 @@ public class MainBoardController {
 	@Autowired
 	private MainBoardService mainBoardService;
 	
+	@Autowired
+	private HospitalService hospitalService;
 
 
 	@Autowired
@@ -50,7 +59,7 @@ public class MainBoardController {
 	public ModelAndView mainBoard(Model model,SearchVO scvo) {
 		ModelAndView mv = new ModelAndView("mainBoard/mainBoard");
 		
-		int limit = 5;
+		int limit = 10;
 		
 		
 		
@@ -182,16 +191,20 @@ public class MainBoardController {
 		String parent_id = request.getParameter("parent_id");
 		String sort_ordr = request.getParameter("sort_ordr");
 		//병원이름 검색한거로 병원 id 검색하기
-		String h_name = request.getParameter("h_name");
-		int h_id = mainBoardService.getH_Id(h_name);
+		 String h_name = request.getParameter("h_name");
+		    Integer h_id = null;
+
+		    
+		    
 		
-		mvo.setH_id(h_id != 0 ? h_id : 0); // h_id가 없을 경우 빈 문자열 설정
-		 
-		
-		
-		
-		
-		
+		    try {
+		        h_id = mainBoardService.getH_Id(h_name);
+		    } catch (Exception e) {
+		        System.out.println("Error fetching h_id for h_name: " + e.getMessage());
+		    }
+		    
+		    // h_id가 null이거나 0일 경우 기본값 설정
+		    mvo.setH_id(h_id != null && h_id != 0 ? h_id : 0); 
 		
 		try {
 			ModelAndView mv = new ModelAndView("redirect:/boardListAll");
@@ -227,10 +240,11 @@ public class MainBoardController {
 			mvo.setMber_nm(mber_nm);
 			mvo.setPassword(password);
 			
-			
+		
 			
 			int result = mainBoardService.setBoardVO(mvo);
 			if (result > 0) {
+			
 
 				return mv;
 			}
@@ -555,6 +569,148 @@ public class MainBoardController {
 		}
 		return new ModelAndView("mainBoard/boardError");
 	}
+	//상담사례( hospital이긴 하나 mainboard db라서  여기서하기로 함.  
+	
+	@RequestMapping("/hospitalConsult")
+	public ModelAndView hospitalConsult(Model model, HttpSession session) {
+	    ModelAndView mv = new ModelAndView("hospitalClick/hospitalConsult");
+	    HospitalVO hvo = (HospitalVO) session.getAttribute("hvo");
+
+	        String h_id = hvo.getH_id();
+	        
+
+	        // 병원아이디로 게시물 리스트 검색
+	        int totalCount = mainBoardService.getCheckConsultReple(h_id);
+	        	System.out.println("토탈카운트"+totalCount);
+	        if (totalCount != 0) {
+	            List<MainBoardVO> list = mainBoardService.getHospitalConsult(h_id);
+	            System.out.println("시스아웃 리스트 " + list);
+	            LocalDate now = LocalDate.now();  // 현재 날짜를 LocalDate로 설정
+	            long daysDifference;
+	            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+	            for (MainBoardVO k : list) {
+	                // wr_id를 parent id로 갖는 게시물이 있는지 검색
+	                int childCount = mainBoardService.getCountHospitalConsultReple(k.getWr_id());
+	                k.setChildCount(childCount);
+
+	                // start_dt를 LocalDate로 변환
+	                LocalDate startDate = LocalDate.parse(k.getStart_dt(), formatter);
+
+	                // start_dt와 현재 날짜(now)의 일자 차이를 계산
+	                daysDifference = ChronoUnit.DAYS.between(startDate, now);
+	                k.setDaysDifference(daysDifference);
+	            }
+
+	            mv.addObject("list", list);
+	            return mv;
+	        }
+	    
+
+	    return mv;
+	}
+	//상담사례디테일
+			@RequestMapping("/hospitalConsultDetail")
+			public ModelAndView hospitalConsultDetail(Model model, HttpSession session,String wr_id) {
+			    ModelAndView mv = new ModelAndView("hospitalClick/hospitalConsultDetail");
+			    HospitalVO hvo = (HospitalVO) session.getAttribute("hvo");
+			    
+		        String h_id = hvo.getH_id();
+		        //상담사례가 있는경우에만 이 탭이 보이므로  예외처리 생략.
+		        //우선 hid를 통한 글 전체 다 가져옴. (답글, 원글포함) 원글 제외 필요함. 상담사례니까 게시판아이디 CONS 고정
+		        MainBoardVO mvo = mainBoardService.getWrList(wr_id, "CONS");
+		        
+		        mv.addObject("mvo", mvo);
+			    
+			    return mv;
+			}
+			
+			
+	//후기 
+	@RequestMapping("/hospitalReview")
+	public ModelAndView hospitalReview(Model model, HttpSession session,String wr_id) {
+		ModelAndView mv = new ModelAndView("hospitalClick/hospitalReview");
+		
+		HospitalVO hvo = (HospitalVO) session.getAttribute("hvo");
+		
+		String h_id = hvo.getH_id();
+			
+		  // 병원아이디로 게시물(리뷰) 리스트 검색
+        	 try {
+        		 List<MainBoardVO> list = mainBoardService.getReview(h_id);
+  	            LocalDate now = LocalDate.now();  // 현재 날짜를 LocalDate로 설정
+  	            long daysDifference;
+  	            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+  	            for (MainBoardVO k : list) {
+
+  	                // start_dt를 LocalDate로 변환
+  	                LocalDate startDate = LocalDate.parse(k.getStart_dt(), formatter);
+
+  	                // start_dt와 현재 날짜(now)의 일자 차이를 계산
+  	                daysDifference = ChronoUnit.DAYS.between(startDate, now);
+  	                k.setDaysDifference(daysDifference);
+  	            }
+  	            
+  	          //세션 vo 사용하기 ( 글삭제,수정버튼 등 용도) 
+  	  	  		SessionUserVO suvo = (SessionUserVO) session.getAttribute("sessionUser");
+  	  	  		String sessionUserId = (suvo != null) ? suvo.getUser_id() : null;
+  	  	  		//유저닉네임 준비 
+  	  	  		MemberVO mbvo = mainBoardService.getUserInfo(sessionUserId);
+  	  	  		String h_name = hvo.getH_name();
+  	  	  		
+  	  	  		mv.addObject("list", list);  //병원에 대한 리뷰리스트.  조회용 리스트는 var k써야함~~ 
+  	  	  		mv.addObject("hvo", hvo); // 병원아이디 . 리뷰조회용, 리뷰 쓸떄용
+  	  	  		mv.addObject("mbvo", mbvo); //멤버정보. 리뷰 쓸떄 용
+  	  	  		
+  	  	  		if (sessionUserId == null) {
+  	  	  			return new ModelAndView("login&join/login");
+  	  	  		}
+  	  	  		
+  	  	  	
+  	        
+  	            return mv;
+ 
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+ 	           
+	
+		return null; 
+	}
+	@RequestMapping("/reviewWrite")
+	public ModelAndView reviewWrite(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("redirect:/hospitalDetail");
+		String bbs_id = request.getParameter("bbs_id");
+		int h_id = Integer.valueOf(request.getParameter("h_id"));
+		String sort_ordr = request.getParameter("sort_ordr");
+		String mber_id = request.getParameter("mber_id");
+		String mber_nm = request.getParameter("mber_nm");
+		String password = request.getParameter("password");
+		String wr_content = request.getParameter("wr_content");
+		String h_score = request.getParameter("h_score");
+		
+		MainBoardVO mvo = new MainBoardVO();
+		mvo.setBbs_id(bbs_id);
+		mvo.setH_id(h_id);
+		mvo.setWr_content(wr_content);
+		mvo.setSort_ordr(sort_ordr);
+		mvo.setMber_id(mber_id);
+		mvo.setMber_nm(mber_nm);
+		mvo.setPassword(password);
+		mvo.setH_score(h_score);
+		
+		mainBoardService.setBoardVO(mvo);
+		
+		
+		
+		mv.addObject("h_id", h_id);
+		
+		return mv;
+		
+	}
+	
+	
 
 	
 }

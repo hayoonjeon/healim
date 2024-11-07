@@ -109,19 +109,7 @@ public class HomeController {
 		return mv; // 蹂묒?�� �긽�꽭 �럹�씠吏�
 	}
 
-	@RequestMapping("/hospitalConsult")
-	public ModelAndView hospitalConsult(Model model) {
-		ModelAndView mv = new ModelAndView("hospitalClick/hospitalConsult");
-
-		return mv; // 蹂묒?�� �긽�꽭 �럹�씠吏�
-	}
-
-	@RequestMapping("/hospitalReview")
-	public ModelAndView hospitalReview(Model model) {
-		ModelAndView mv = new ModelAndView("hospitalClick/hospitalReview");
-
-		return mv; // 蹂묒?�� �긽�꽭 �럹�씠吏�
-	}
+	
 
 	@RequestMapping("/honey1")
 	public ModelAndView honey1() {

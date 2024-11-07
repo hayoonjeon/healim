@@ -103,5 +103,29 @@ public class MainBoardDAOImpl implements MainBoardDAO {
 		return sqlSessionTemplate.selectOne("mainBoard.getuserinfo", mber_id);
 	}
 
+	@Override
+	public List<MainBoardVO> getHospitalConsult(String h_id) {
+		// TODO Auto-generated method stub
+		return sqlSessionTemplate.selectList("mainBoard.gethospitalconsult", h_id);
+	}
+
+	@Override
+	public int getCountHospitalConsultReple(String wr_id) {
+		// TODO Auto-generated method stub
+		return sqlSessionTemplate.selectOne("mainBoard.getcounthospitalconsultreple", wr_id);
+	}
+
+	@Override
+	public int getCheckConsultReple(String h_id) {
+		// TODO Auto-generated method stub
+		return sqlSessionTemplate.selectOne("mainBoard.getcheckconsultreple", h_id);
+	}
+
+	@Override
+	public List<MainBoardVO> getReview(String h_id) {
+		// TODO Auto-generated method stub
+		return sqlSessionTemplate.selectList("mainBoard.getreview", h_id);
+	}
+
 
 }

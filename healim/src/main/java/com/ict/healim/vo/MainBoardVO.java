@@ -4,12 +4,31 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class MainBoardVO {
 	private String wr_id, bbs_id, wr_subject, wr_content, answer_at, parent_id, 
-	answer_lc, sort_ordr, rdcnt, use_at, start_dt, end_dt, mber_id, mber_nm, password, atch_file_id,old_atch_file_id,upd_by,crt_dt, upd_dt,group_id,wr_active;
-	private int h_id;
+	answer_lc, sort_ordr, rdcnt, use_at, start_dt, end_dt, mber_id, mber_nm, password,h_score, atch_file_id,old_atch_file_id,upd_by,crt_dt, upd_dt,group_id,wr_active;
+	private int h_id,childCount;
+	public long daysDifference;
 	private MultipartFile file_name;
 	
 	
 
+	public String getH_score() {
+		return h_score;
+	}
+	public void setH_score(String h_score) {
+		this.h_score = h_score;
+	}
+	public long getDaysDifference() {
+		return daysDifference;
+	}
+	public void setDaysDifference(long daysDifference) {
+		this.daysDifference = daysDifference;
+	}
+	public int getChildCount() {
+		return childCount;
+	}
+	public void setChildCount(int childCount) {
+		this.childCount = childCount;
+	}
 	public String getWr_active() {
 		return wr_active;
 	}

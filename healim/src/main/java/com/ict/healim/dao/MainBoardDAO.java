@@ -45,5 +45,15 @@ public interface MainBoardDAO {
 
 	// 멤버검색
 	public MemberVO getUserInfo(String mber_id);
+	
+	//병원아이디로 상담사례 게시물 검색
+	public List<MainBoardVO> getHospitalConsult(String h_id);
+	
+	//상담사례가 답변완료인지 체크하기 
+	public int getCountHospitalConsultReple(String wr_id);
+	//상담사례까 있는지 없는지 체크하ㅣㄱ
+	public int getCheckConsultReple(String h_id);
+	//병원아이디로 후기 검색하기
+	public List<MainBoardVO> getReview(String h_id);
 
 }
