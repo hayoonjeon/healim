@@ -36,7 +36,7 @@
             <c:when test="${not empty sessionScope.sessionUser}"> <!-- 사용자가 로그인한 경우 -->
             <c:choose>
             <c:when test="${sessionScope.platform == 'kakao' }">
-                <li><a href="https://kauth.kakao.com/oauth/logout?client_id=c511457645936818e2db5ecdc890dc9d&logout_redirect_uri=http://localhost:8080/kakaologout">로그아웃</a></li>
+                <li><a href="https://kauth.kakao.com/oauth/logout?client_id=fc0f2a1e052696d852c1539b4d217b28&logout_redirect_uri=http://15.165.237.2/kakaologout">로그아웃</a></li>
             </c:when>
             <c:otherwise>
                 <li><a href="/logout">로그아웃</a></li>
