@@ -262,68 +262,72 @@ thead th:nth-child(3) {
 .buttons {
 	display: flex;
 	justify-content: space-between;
-	height:30px;
+	height: 30px;
 }
 
 #gray {
 	color: gray;
 }
 
-  .search-container {
-    background-color: #F7F7F7; 
-    width: 30%;
-    height: 55px;
-    border: 1px solid #ddd;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    }
-    .search-form {
-      height: 37px;
-      display: flex;
-    }
-    .search-option {
-      width: 100px;
-      height: 100%;
-      outline: none;
-      margin-right: 5px;
-      border: 1px solid #ccc;
-      color: gray;
-    }
+.search-container {
+	background-color: #F7F7F7;
+	width: 30%;
+	height: 55px;
+	border: 1px solid #ddd;
+	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
-    .search-option > option {
-      text-align: center;
-    }
+.search-form {
+	height: 37px;
+	display: flex;
+}
 
-    .search-input {
-      color: gray;
-      background-color: white;
-      border: 1px solid #ccc;
-      height: 70%;
-      width: 300px;
-      font-size: 15px;
-      padding: 5px 7px;
-    }
-    .search-input::placeholder {
-      color: gray;
-    }
+.search-option {
+	width: 100px;
+	height: 100%;
+	outline: none;
+	margin-right: 5px;
+	border: 1px solid #ccc;
+	color: gray;
+}
 
-    .search-button {
-      /* 메뉴바의 검색 버튼 아이콘  */
-      width: 20%;
-      height: 100%;
-      background-color: rgb(22, 22, 22);
-      color: rgb(209, 209, 209);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-      margin-left: 5px;
-    }
-    .search-button:hover {
-      color: rgb(165, 165, 165);
-    }
+.search-option>option {
+	text-align: center;
+}
+
+.search-input {
+	color: gray;
+	background-color: white;
+	border: 1px solid #ccc;
+	height: 70%;
+	width: 300px;
+	font-size: 15px;
+	padding: 5px 7px;
+}
+
+.search-input::placeholder {
+	color: gray;
+}
+
+.search-button {
+	/* 메뉴바의 검색 버튼 아이콘  */
+	width: 20%;
+	height: 100%;
+	background-color: rgb(22, 22, 22);
+	color: rgb(209, 209, 209);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 15px;
+	margin-left: 5px;
+}
+
+.search-button:hover {
+	color: rgb(165, 165, 165);
+}
 </style>
 </head>
 <body>
@@ -334,25 +338,25 @@ thead th:nth-child(3) {
 		<div class="buttons">
 			<input type="button" value="뒤로 가기"
 				onclick="location.href='/mainBoard'">
-				
-				<!-- 검색버튼-->
-				<div class="search-container">
-					<form action="<c:url value="/boardListAll"/>" class="search-form"
-						method="get">
-						<select class="search-option" name="option">
-							<option value="A"
-								${pg.sc.option=='A' || pg.sc.option=='' ? "selected" : ""}>전체</option>
-							 <option value="S" ${pg.sc.option=='S' ? "selected" : ""}>제목</option>
-							<option value="W" ${pg.sc.option=='W' ? "selected" : ""}>작성자</option>
-						</select> <input type="text" name="keyword" class="search-input"
-							value="${pg.sc.keyword}" placeholder="검색어를 입력해주세요">
-							<input type="hidden" name=bbs_id value=${bbs_id}>
-						<input type="submit" class="search-button" value="검색">
-					</form>                                  
-				</div>
-				
-				
-				
+
+			<!-- 검색버튼-->
+			<div class="search-container">
+				<form action="<c:url value="/boardListAll"/>" class="search-form"
+					method="get">
+					<select class="search-option" name="option">
+						<option value="A"
+							${pg.sc.option=='A' || pg.sc.option=='' ? "selected" : ""}>전체</option>
+						<option value="S" ${pg.sc.option=='S' ? "selected" : ""}>제목</option>
+						<option value="W" ${pg.sc.option=='W' ? "selected" : ""}>작성자</option>
+					</select> <input type="text" name="keyword" class="search-input"
+						value="${pg.sc.keyword}" placeholder="검색어를 입력해주세요"> <input
+						type="hidden" name=bbs_id value=${bbs_id}> <input
+						type="submit" class="search-button" value="검색">
+				</form>
+			</div>
+
+
+
 			<c:if test="${bbs_id !='NOTI'}">
 				<input type="button" value="글쓰기"
 					onclick="location.href='/boardOneListWrite?bbs_id=${bbs_id}'">
@@ -369,79 +373,88 @@ thead th:nth-child(3) {
 
 			</thead>
 			<tbody>
-				<!-- boardList의 각 항목을 행으로 출력 -->
-				<c:forEach var="k" items="${list}">
-					<c:if test="${k.answer_at != 'Y' }">
-						<!-- 댓글이 아닌경우에만 보이게 하기. -->
-						<tr>
-							<td><a
-								href="/boardOneList?bbs_id=${k.bbs_id}&wr_id=${k.wr_id}"
-								class="subjectItem"> <c:choose>
-										<c:when test="${k.parent_id == null ||k.parent_id == ''}">
-                ${k.wr_subject}
-                  </c:when>
-										<c:otherwise>
-											<span id="gray"> ㄴ ${k.wr_subject}</span>
-										</c:otherwise>
-									</c:choose>
-							</a></td>
-							<td>${k.mber_nm}</td>
-							<!-- 작성자 -->
-							<td>${k.start_dt}</td>
-							<!-- 등록일자 -->
-						</tr>
-					</c:if>
-				</c:forEach>
+				<c:if test="${not empty list}">
+					<!-- boardList의 각 항목을 행으로 출력 -->
+					<c:forEach var="k" items="${list}">
+						<!-- 기존 코드 그대로 -->
+						<c:if test="${k.answer_at != 'Y'}">
+							<!-- 댓글이 아닌 경우에만 보이게 하기. -->
+							<tr>
+								<td><a
+									href="/boardOneList?bbs_id=${k.bbs_id}&wr_id=${k.wr_id}"
+									class="subjectItem"> <c:choose>
+											<c:when test="${k.parent_id == null || k.parent_id == ''}">
+                                ${k.wr_subject}
+                            </c:when>
+											<c:otherwise>
+												<span id="gray"> ㄴ ${k.wr_subject}</span>
+											</c:otherwise>
+										</c:choose>
+								</a></td>
+								<td>${k.mber_nm}</td>
+								<!-- 작성자 -->
+								<td>${k.start_dt}</td>
+								<!-- 등록일자 -->
+							</tr>
+						</c:if>
+					</c:forEach>
+				</c:if>
+				<c:if test="${empty list}">
+					<!-- 검색 결과가 없을 때 -->
+					<tr>
+						<td colspan="3" style="text-align: center;">검색 결과가 없습니다.</td>
+					</tr>
+				</c:if>
 			</tbody>
 		</table>
 
-		<!-- 페이징기법 -->
-		<div>
-			<nav aria-label="Page navigation example">
-				<ul class="pagination">
-					<!-- 이전 페이지 링크 -->
-					<c:if test="${totalCnt!=null && totalCnt!=0}">
-						<c:if test="${pg.showPrev}">
-							<li class="page-item" id="pre"><a class="page-link"
-								href="<c:url value='/boardListAll'/>${pg.sc.getQueryString(pg.beginPage-1)}&bbs_id=${sc.bbs_id}"
-								aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-							</a></li>
-						</c:if>
-
-						<!-- 페이지 번호 링크 -->
-						<c:forEach var="i" begin="${pg.beginPage}" end="${pg.endPage}">
-							<li class="page-item ${pg.sc.page == i ? 'active' : ''}"><a
-								class="page-link"
-								href="<c:url value='/boardListAll'/>${pg.sc.getQueryString(i)}&bbs_id=${sc.bbs_id}">
-									${i} </a></li>
-						</c:forEach>
-
-						<!-- 다음 페이지 링크 -->
-						<c:if test="${pg.showNext}">
-							<li class="page-item" id="next"><a class="page-link"
-								href="<c:url value='/boardListAll'/>${pg.sc.getQueryString(pg.endPage + 1)}&bbs_id=${sc.bbs_id}"
-								aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-							</a></li>
-						</c:if>
-					</c:if>
-				</ul>
-			</nav>
-		</div>
+		<!-- 페이징 기법 -->
+<div>
+    <c:if test="${not empty pg && totalCnt > 0}">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <!-- 이전 페이지 링크 -->
+                <c:if test="${pg.showPrev}">
+                    <li class="page-item" id="pre"><a class="page-link"
+                        href="<c:url value='/boardListAll'/>${pg.sc.getQueryString(pg.beginPage-1)}&bbs_id=${sc.bbs_id}"
+                        aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+                    </a></li>
+                </c:if>
+                <!-- 페이지 번호 링크 -->
+                <c:forEach var="i" begin="${pg.beginPage}" end="${pg.endPage}">
+                    <li class="page-item ${pg.sc.page == i ? 'active' : ''}"><a
+                        class="page-link"
+                        href="<c:url value='/boardListAll'/>${pg.sc.getQueryString(i)}&bbs_id=${sc.bbs_id}">
+                            ${i} </a></li>
+                </c:forEach>
+                <!-- 다음 페이지 링크 -->
+                <c:if test="${pg.showNext}">
+                    <li class="page-item" id="next"><a class="page-link"
+                        href="<c:url value='/boardListAll'/>${pg.sc.getQueryString(pg.endPage + 1)}&bbs_id=${sc.bbs_id}"
+                        aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+                    </a></li>
+                </c:if>
+            </ul>
+        </nav>
+    </c:if>
+</div>
 
 	</div>
 
 	<nav class="floating-nav">
 		<ul>
-			<li><a href="/home"><img src="/resources/img/hom4.jpg" alt="홈 이미지"></a> <a
-				href="/home">홈</a></li>
-			<li><a href="/boardListAll?bbs_id=CONS"><img src="/resources/img/sangdam.jpg" alt="상담 사례 이미지"></a>
-				<a href="/boardListAll?bbs_id=CONS">상담<br>사례
+			<li><a href="/home"><img src="/resources/img/hom4.jpg"
+					alt="홈 이미지"></a> <a href="/home">홈</a></li>
+			<li><a href="/boardListAll?bbs_id=CONS"><img
+					src="/resources/img/sangdam.jpg" alt="상담 사례 이미지"></a> <a
+				href="/boardListAll?bbs_id=CONS">상담<br>사례
 			</a></li>
-			<li><a href="/region_selected"><img src="/resources/img/sisul.jpg" alt="시설 찾기 이미지"></a> <a
+			<li><a href="/region_selected"><img
+					src="/resources/img/sisul.jpg" alt="시설 찾기 이미지"></a> <a
 				href="/region_selected">시설<br>찾기
 			</a></li>
-			<li><a href="/myPage"><img src="/resources/img/my.jpg" alt="마이 페이지 이미지"></a> <a
-				href="/myPage">마이<br>페이지
+			<li><a href="/myPage"><img src="/resources/img/my.jpg"
+					alt="마이 페이지 이미지"></a> <a href="/myPage">마이<br>페이지
 			</a></li>
 		</ul>
 	</nav>

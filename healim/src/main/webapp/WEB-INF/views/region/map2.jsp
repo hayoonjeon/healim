@@ -245,7 +245,7 @@ body{
 </div>
 
 <!-- 수정된 자바스크립트 파일 로딩 -->
-<script src="//dapi.kakao.com/v2/maps/sdk.js?802825deb6634601e0e838a216dbd854&libraries=services"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6f548e1d389e3b8ae5804cac96623033&libraries=services"></script>
 
 <script>
     // 마커를 담을 배열입니다

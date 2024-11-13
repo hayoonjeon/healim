@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,31 +77,43 @@ public class MainBoardController {
 
 	@RequestMapping("/boardListAll")
 	public ModelAndView getBoardList(@RequestParam("bbs_id") String bbs_id, SearchVO sc) {
-		ModelAndView mv = new ModelAndView("mainBoard/boardListAll");
-		String bbsName = mainBoardService.getBbsName(bbs_id);
-		
-		sc.setBbs_id(bbs_id);
-		
-		//페이지 용 전체 게시물 갯수 구하기(활성화, 댓글 x , 답글포함)
-		int totalCnt = mainBoardService.getCountWrList(sc);
-		//혹시모르니 totalcnt 넣어두기(검색 총 몇 건 용..?)
-		mv.addObject("totalCnt", totalCnt);
-		
-		MainBoardPagingVO pgvo = new MainBoardPagingVO(totalCnt,sc);
-		List<MainBoardVO> list = mainBoardService.getBbsList(sc, null);
-		System.out.println("sc 페이지사이즈 : "+sc.getPageSize());
-		System.out.println("sc 옵셋 : "+sc.getOffset());
-		System.out.println("sc 키워드 : "+sc.getKeyword());
-			
-		
-		mv.addObject("pg", pgvo);
-		mv.addObject("sc", sc);
-		mv.addObject("list", list);
-		mv.addObject("bbsName", bbsName);
-		mv.addObject("bbs_id", bbs_id);
-		System.out.println("boardListAll bbsid 확인" + bbs_id);
+	    ModelAndView mv = new ModelAndView("mainBoard/boardListAll");
+	    String bbsName = mainBoardService.getBbsName(bbs_id);
+	    
+	    sc.setBbs_id(bbs_id);
+	    
+	    if (sc.getPage() == null || sc.getPage() < 1) {
+	        sc.setPage(1);
+	    }
+	    
+	    // 페이지 용 전체 게시물 갯수 구하기(활성화, 댓글 x , 답글포함)
+	    int totalCnt = mainBoardService.getCountWrList(sc);
+	    // 혹시 모르니 totalCnt 넣어두기(검색 총 몇 건 용)
+	    mv.addObject("totalCnt", totalCnt);
+	    
+	    // 페이지 정보 객체 초기화
+	    MainBoardPagingVO pgvo = new MainBoardPagingVO(totalCnt, sc);
+	    
+	    
+	    
+	    
+	    // 게시물 목록 가져오기
+	    List<MainBoardVO> list = mainBoardService.getBbsList(sc, null);
+	    if (list == null) {
+	        list = new ArrayList<>();
+	    }
+	    System.out.println("sc 페이지사이즈 : " + sc.getPageSize());
+	    System.out.println("sc 옵셋 : " + sc.getOffset());
+	    System.out.println("sc 키워드 : " + sc.getKeyword());
+	    
+	    mv.addObject("pg", pgvo);
+	    mv.addObject("sc", sc);
+	    mv.addObject("list", list);
+	    mv.addObject("bbsName", bbsName);
+	    mv.addObject("bbs_id", bbs_id);
+	    System.out.println("boardListAll bbsid 확인 " + bbs_id);
 
-		return mv;
+	    return mv;
 	}
 
 	@RequestMapping("/boardOneList")
@@ -664,8 +677,9 @@ public class MainBoardController {
   	  	  		mv.addObject("list", list);  //병원에 대한 리뷰리스트.  조회용 리스트는 var k써야함~~ 
   	  	  		mv.addObject("hvo", hvo); // 병원아이디 . 리뷰조회용, 리뷰 쓸떄용
   	  	  		mv.addObject("mbvo", mbvo); //멤버정보. 리뷰 쓸떄 용
-  	  	  		
-  	  	  	
+				/*
+				 * if (sessionUserId == null) { return new ModelAndView("login&join/login"); }
+				 */
   	  	  	
   	        
   	            return mv;

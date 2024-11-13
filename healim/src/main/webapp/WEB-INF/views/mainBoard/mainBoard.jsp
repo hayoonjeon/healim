@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -63,9 +63,6 @@ body {
 }
 
 .board-header img {
-	width: 40px;
-	height: 20px;
-	border-radius: 8px;
 }
 
 .board-content {
@@ -170,7 +167,7 @@ a, a:visited, a:hover, a:active {
 		<!-- 공지사항, 질문과 답변, 병원 소식, 자유게시판 섹션 -->
 
 		<div class="board-box">
-			<div class="board-header">
+			<div class="board-header" style="margin:19px 0px">
 				<a href="/boardListAll?bbs_id=NOTI"><span>공지사항</span></a>
 			</div>
 			<div class="board-content" onclick="location.href='/boardListAll?bbs_id=NOTI'">
@@ -186,7 +183,7 @@ a, a:visited, a:hover, a:active {
 			<div class="board-header">
 				<a href="/boardListAll?bbs_id=INQU"><span>문의사항</span></a> <a
 					href="/boardOneListWrite?bbs_id=INQU"> <img
-					src="/resources/img/greenplus.jpg" alt="추가 버튼">
+					src="/resources/img/greenplus.png" alt="추가 버튼">
 				</a>
 			</div>
 			<div class="board-content" onclick="location.href='/boardListAll?bbs_id=INQU'">
@@ -202,7 +199,7 @@ a, a:visited, a:hover, a:active {
 			<div class="board-header">
 				<a href="/boardListAll?bbs_id=CONS"><span>상담내역</span></a> <a
 					href="/boardOneListWrite?bbs_id=CONS"> <img
-					src="/resources/img/greenplus.jpg" alt="추가 버튼">
+					src="/resources/img/greenplus.png" alt="추가 버튼">
 				</a>
 			</div>
 			<div class="board-content"  onclick="location.href='/boardListAll?bbs_id=CONS'">
@@ -218,7 +215,7 @@ a, a:visited, a:hover, a:active {
 			<div class="board-header">
 				<a href="/boardListAll?bbs_id=FREE"><span>자유 게시판</span></a> <a
 					href="/boardOneListWrite?bbs_id=FREE"> <img
-					src="/resources/img/greenplus.jpg" alt="추가 버튼">
+					src="/resources/img/greenplus.png" alt="추가 버튼">
 				</a>
 			</div>
 			<div class="board-content"  onclick="location.href='/boardListAll?bbs_id=FREE'">
@@ -232,4 +229,4 @@ a, a:visited, a:hover, a:active {
 
 
 </body>
-</html>
+</html> 

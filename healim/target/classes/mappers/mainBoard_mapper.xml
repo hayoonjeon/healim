@@ -5,17 +5,18 @@
 <mapper namespace="mainBoard">
 	<!-- 게시판의 게시물 전체 리스트, 메인보드페이지에선 limit을 컨트롤러에서 받아서 limit 3줌. -->
 	<select id="getBbsList" resultType="mvo" parameterType="Map">
-		select * from tb_bbs where bbs_id = #{scvo.bbs_id} and answer_at = 'N'
-		and wr_active='0'
-		<include refid="searchCondition" />
-		ORDER BY group_id DESC, sort_ordr ASC
-		<if test="limit != null">
-			limit #{limit}
-		</if>
-		<if test="limit == null">
-			LIMIT #{scvo.offset}, #{scvo.pageSize}
-		</if>
-	</select>
+    SELECT * FROM tb_bbs
+    WHERE bbs_id = #{scvo.bbs_id}
+      AND answer_at = 'N'
+      AND wr_active = '0'
+    <include refid="searchCondition" />
+    ORDER BY group_id DESC, sort_ordr ASC
+    LIMIT
+    <if test="scvo.offset != null and scvo.offset >= 0">
+        #{scvo.offset},
+    </if>
+    #{scvo.pageSize}
+</select>
 	<!-- 게시판의 게시물 전체 리스트 갯수 세기(페이징용) 댓글이 아니면서, 액티브 0(활성화) -->
 	<select id="countwrlist" parameterType="scvo" resultType="int">
 		SELECT count(*)

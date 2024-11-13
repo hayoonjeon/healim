@@ -15,7 +15,7 @@ public class SearchVO {
 	private String h_type ;  // 병원/요양원 구분(H:병원 N:요양원)
 	private String h_name ;  // 병원 명
 	
-//    private Integer  offset;
+	private Integer  offset;
 
     public String getH_name() {
 		return h_name;
@@ -76,7 +76,11 @@ public class SearchVO {
     }
 
     public void setPage(Integer page) {
-        this.page = page;
+        if (page == null || page < 1) {
+            this.page = 1;
+        } else {
+            this.page = page;
+        }
     }
 
     public Integer getPageSize() {
@@ -107,10 +111,17 @@ public class SearchVO {
     }
 
     public Integer getOffset() {
-        return (page-1)*pageSize;
+        int calculatedOffset = (page - 1) * pageSize;
+        return calculatedOffset < 0 ? 0 : calculatedOffset;
     }
 
-    @Override
+    
+    
+    public void setOffset(Integer offset) {
+		this.offset = offset;
+	}
+
+	@Override
     public String toString() {
         return "SearchVO{" +
                 "page=" + page +

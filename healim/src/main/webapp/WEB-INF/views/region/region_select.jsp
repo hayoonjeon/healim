@@ -179,7 +179,7 @@ h2 {
 
 		<div class="region-selection">
 			<img src="resources/img/ping.png" alt="현위치 이미지"
-				style="width: 30px; height: auto;"> <a href="/map">현위치</a>
+				style="width: 30px; height: auto;"> <a href="/map2">현위치</a>
 		</div>
 
 		<form action="/search_location">
